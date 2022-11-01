@@ -1,6 +1,3 @@
-from email.policy import default
-from enum import unique
-from typing_extensions import Required
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
