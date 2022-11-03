@@ -1,11 +1,14 @@
-from email.policy import default
-from enum import unique
-from typing_extensions import Required
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
 class User(AbstractUser):
+    ROLES = [
+        ('User', 'User'),
+        ('Moderator', 'Moderator'),
+        ('Admin', 'Admin'),
+    ]
+
     username = models.CharField(
         'Имя пользователя',
         unique=True,
@@ -26,7 +29,8 @@ class User(AbstractUser):
         'Биография',
         blank=True,
     )
-    role = models.TextField(
+    role = models.CharField(
         'Роль',
-        default='user',
+        choices=ROLES,
+        default='User',
     )
