@@ -1,7 +1,9 @@
 from django.db import models
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from users.models import User
 from app.models import Titles
+from .validators import validate_year
 
 
 class Reviews(models.Model):
@@ -64,9 +66,6 @@ class Comments(models.Model):
 
     def __str__(self):
         return self.text[:15]
-from django.db import models
-
-from .validators import validate_year
 
 
 class Category(models.Model):
