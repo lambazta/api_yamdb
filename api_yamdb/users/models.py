@@ -29,8 +29,11 @@ class User(AbstractUser):
         'Биография',
         blank=True,
     )
-    role = models.CharField(
+    role = models.TextField(
         'Роль',
         choices=ROLES,
         default='User',
+    )
+    confirmation_code = models.TextField(
+        'Код подтверждения',
     )
