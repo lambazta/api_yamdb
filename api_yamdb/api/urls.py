@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 from .views import (
     RegistrationAPI, VerifyAccountAPI, MeViewSet, UserViewSet)
-from api.views import ReviewsViewSet, CommentsViewSet
+from api.views import ReviewsViewSet, CommentsViewSet, TitlesViewSet
 
 
 app_name = 'api'
@@ -10,6 +10,7 @@ app_name = 'api'
 
 router_v1 = routers.DefaultRouter()
 router_v1.register(r'users', UserViewSet, basename='users')
+router_v1.register(r'titles', TitlesViewSet, basename='titles')
 router_v1.register(r'titles/(?P<title_id>\d+)/reviews', ReviewsViewSet,
                    basename='review')
 router_v1.register(

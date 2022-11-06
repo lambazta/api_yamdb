@@ -10,6 +10,7 @@ from rest_framework import status
 from reviews.models import Review, Title, Comment
 from .permissions import AuthorizedOrReadOnly
 from .serializers import CommentsSerializer, ReviewsSerializer
+from .serializers import TitleSerializer
 from rest_framework.pagination import LimitOffsetPagination
 
 # from rest_framework import viewsets
@@ -117,3 +118,13 @@ class CommentsViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         review = get_object_or_404(Review, pk=self.kwargs.get('review_id'))
         serializer.save(author=self.request.user, review=review)
+
+
+class TitlesViewSet(viewsets.ModelViewSet):
+    queryset = Title.objects.all()
+    serializer_class = TitleSerializer
+    permission_classes = [AuthorizedOrReadOnly]
+    pagination_class = LimitOffsetPagination
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
