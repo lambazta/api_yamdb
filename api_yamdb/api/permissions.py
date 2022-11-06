@@ -25,7 +25,6 @@ class IsModeratorPermission(permissions.BasePermission):
         return (
             request.user.role == 'moderator'
         )
-from rest_framework import permissions
 
 
 class AuthorizedOrReadOnly(permissions.BasePermission):
@@ -41,6 +40,6 @@ class AuthorizedOrReadOnly(permissions.BasePermission):
             return True
         return (
             obj.author == request.user
-            or request.user.role == 'Admin'
-            or request.user.role == 'Moderator'
+            or request.user.role == 'admin'
+            or request.user.role == 'moderator'
         )

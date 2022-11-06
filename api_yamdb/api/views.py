@@ -5,7 +5,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
+from django.shortcuts import get_list_or_404
 from rest_framework import status
+from reviews.models import Review, Title, Comment
+from .permissions import AuthorizedOrReadOnly
+from .serializers import CommentsSerializer, ReviewsSerializer
+from rest_framework.pagination import LimitOffsetPagination
+
+# from rest_framework import viewsets
+# from users.models import User
+# from django.shortcuts import get_object_or_404
 
 from .permissions import IsAdminPermission
 from .serializers import (
@@ -13,7 +22,7 @@ from .serializers import (
     VerifyAccountSerializer,
     UserSerializer,
     MeSerializer
-    )
+)
 from users.models import User
 from users.utils import send_confirmation_code
 
@@ -82,14 +91,6 @@ class UserViewSet(viewsets.ModelViewSet):
     lookup_field = 'username'
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
-from rest_framework import viewsets
-from reviews.models import Review, Title, Comment
-# from users.models import User
-from django.shortcuts import get_object_or_404
-from django.shortcuts import get_list_or_404
-from .permissions import AuthorizedOrReadOnly
-from .serializers import CommentsSerializer, ReviewsSerializer
-from rest_framework.pagination import LimitOffsetPagination
 
 
 class ReviewsViewSet(viewsets.ModelViewSet):
