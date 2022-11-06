@@ -12,8 +12,7 @@ from .serializers import (
     RegistrationSerializer,
     VerifyAccountSerializer,
     UserSerializer,
-    MeSerializer
-    )
+    MeSerializer)
 from users.models import User
 from users.utils import send_confirmation_code
 
@@ -24,7 +23,12 @@ class RegistrationAPI(APIView):
     def post(self, request):
         data = request.data
         serializer = RegistrationSerializer(data=data)
-        if serializer.is_valid():
+        username = request.data['username']
+        if User.objects.filter(username=username).exists():
+            send_confirmation_code(**data)
+            return Response(data, status=status.HTTP_200_OK)
+
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             send_confirmation_code(**serializer.data)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -37,7 +41,7 @@ class VerifyAccountAPI(APIView):
     def post(self, request):
         data = request.data
         serializer = VerifyAccountSerializer(data=data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             username = serializer.data['username']
             confirmation_code = serializer.data['confirmation_code']
             user = get_object_or_404(User, username=username)

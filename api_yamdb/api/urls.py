@@ -3,8 +3,6 @@ from rest_framework import routers
 from .views import (
     RegistrationAPI, VerifyAccountAPI, MeViewSet, UserViewSet)
 
-# from .views import CommentViewSet, FollowViewSet, GroupViewSet, PostViewSet
-
 app_name = 'api'
 
 
