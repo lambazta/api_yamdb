@@ -1,5 +1,6 @@
 
 from django.db import models
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from .validators import validate_year
 from users.models import User
@@ -91,7 +92,7 @@ class Review(models.Model):
         Title,
         on_delete=models.CASCADE,
         related_name='reviews',
-        verbose_name='Название произведения'
+        verbose_name='Произведение'
     )
     text = models.TextField(
         verbose_name='Ваш отзыв',
@@ -100,7 +101,7 @@ class Review(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='author',
+        related_name='reviews',
         verbose_name='Автор отзыва'
     )
     score = models.IntegerField(
@@ -126,7 +127,7 @@ class Comment(models.Model):
         Review,
         on_delete=models.CASCADE,
         related_name='comments',
-        verbose_name='Пост'
+        verbose_name='Отзыв'
     )
     text = models.TextField(
         verbose_name='Комментарий',
