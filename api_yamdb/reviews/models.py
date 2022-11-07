@@ -1,8 +1,9 @@
-from django.db import models
 
+from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from users.models import User
 from .validators import validate_year
+
 
 
 class Category(models.Model):
@@ -86,6 +87,7 @@ class Title(models.Model):
         return self.name[:30]
 
 
+
 class GenreTitle(models.Model):
     genre = models.ForeignKey(
         Genre,
@@ -109,7 +111,7 @@ class Review(models.Model):
         Title,
         on_delete=models.CASCADE,
         related_name='reviews',
-        verbose_name='Название произведения'
+        verbose_name='Произведение'
     )
     text = models.TextField(
         verbose_name='Ваш отзыв',
@@ -118,7 +120,7 @@ class Review(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='author',
+        related_name='reviews',
         verbose_name='Автор отзыва'
     )
     score = models.IntegerField(
@@ -139,12 +141,16 @@ class Review(models.Model):
         return self.text[:30]
 
 
+
 class Comment(models.Model):
     review_id = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
         related_name='comments',
+
+        verbose_name='Отзыв'
         verbose_name='Пост'
+
     )
     text = models.TextField(
         verbose_name='Комментарий',

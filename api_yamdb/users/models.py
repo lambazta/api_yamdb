@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
 from .validators import UsernameRegexValidator, me_username
 
 
@@ -26,12 +25,10 @@ class User(AbstractUser):
     first_name = models.TextField(
         'Имя',
         blank=True,
-
     )
     last_name = models.TextField(
         'Фамилия',
         blank=True,
-
     )
     bio = models.TextField(
         'Биография',
@@ -48,3 +45,4 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
