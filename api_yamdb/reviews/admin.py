@@ -1,7 +1,5 @@
 from django.contrib import admin
-
-# from .models import Titles, Genres, Category
-from .models import Title, Review, Comment
+from .models import Category, Comment, Genre, GenreTitle, Review, Title
 
 
 class TitlesAdmin(admin.ModelAdmin):
@@ -10,9 +8,6 @@ class TitlesAdmin(admin.ModelAdmin):
                     'category', 'rating')
     # Добавляем интерфейс для поиска по тексту постов
     search_fields = ('name',)
-
-
-admin.site.register(Title, TitlesAdmin)
 
 
 class ReviewsAdmin(admin.ModelAdmin):
@@ -24,9 +19,6 @@ class ReviewsAdmin(admin.ModelAdmin):
     list_filter = ('pub_date',)
 
 
-admin.site.register(Review, ReviewsAdmin)
-
-
 class CommentsAdmin(admin.ModelAdmin):
     # Перечисляем поля, которые должны отображаться в админке
     list_display = ('review_id', 'text', 'author', 'pub_date')
@@ -35,5 +27,11 @@ class CommentsAdmin(admin.ModelAdmin):
     # Добавляем возможность фильтрации по дате
     list_filter = ('pub_date',)
 
-
+admin.site.register(Review, ReviewsAdmin)
 admin.site.register(Comment, CommentsAdmin)
+admin.site.register(Title, TitlesAdmin)
+admin.site.register(Category)
+admin.site.register(Genre)
+admin.site.register(GenreTitle)
+
+

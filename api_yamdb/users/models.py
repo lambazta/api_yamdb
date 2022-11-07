@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
 from .validators import UsernameRegexValidator, me_username
 
 
@@ -26,12 +25,10 @@ class User(AbstractUser):
     first_name = models.TextField(
         'Имя',
         blank=True,
-        # null=True,
     )
     last_name = models.TextField(
         'Фамилия',
         blank=True,
-        # null=True,
     )
     bio = models.TextField(
         'Биография',
@@ -45,5 +42,7 @@ class User(AbstractUser):
     confirmation_code = models.TextField(
         'Код подтверждения',
     )
-    # password = models.CharField(
-    #     'password', max_length=128, blank=True, null=True)
+
+    def __str__(self):
+        return self.username
+

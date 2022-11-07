@@ -1,15 +1,15 @@
 
 from django.db import models
-
 from django.core.validators import MaxValueValidator, MinValueValidator
-from .validators import validate_year
 from users.models import User
+from .validators import validate_year
+
 
 
 class Category(models.Model):
     name = models.CharField(
         'Название',
-        max_length=100
+        max_length=256
     )
     slug = models.SlugField(
         'Идентификатор',
@@ -29,7 +29,7 @@ class Category(models.Model):
 class Genre(models.Model):
     name = models.CharField(
         'Название',
-        max_length=100
+        max_length=256
     )
     slug = models.SlugField(
         'Идентификатор',
@@ -49,7 +49,7 @@ class Genre(models.Model):
 class Title(models.Model):
     name = models.CharField(
         'Название',
-        max_length=200
+        max_length=256
     )
     year = models.IntegerField(
         'Год выпуска',
@@ -63,7 +63,7 @@ class Title(models.Model):
     genre = models.ManyToManyField(
         Genre,
         verbose_name='Жанр',
-        null=True
+        through='GenreTitle'
     )
     category = models.ForeignKey(
         Category,
@@ -85,6 +85,25 @@ class Title(models.Model):
 
     def __str__(self):
         return self.name[:30]
+
+
+
+class GenreTitle(models.Model):
+    genre = models.ForeignKey(
+        Genre,
+        verbose_name='Жанр',
+        on_delete=models.CASCADE)
+    title = models.ForeignKey(
+        Title,
+        verbose_name='Произведение',
+        on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.title}, жанр - {self.genre}'
+
+    class Meta:
+        verbose_name = 'Произведение и жанр'
+        verbose_name_plural = 'Произведения и жанры'
 
 
 class Review(models.Model):
@@ -119,7 +138,8 @@ class Review(models.Model):
         ordering = ('-pub_date',)
 
     def __str__(self):
-        return self.name
+        return self.text[:30]
+
 
 
 class Comment(models.Model):
@@ -127,7 +147,10 @@ class Comment(models.Model):
         Review,
         on_delete=models.CASCADE,
         related_name='comments',
+
         verbose_name='Отзыв'
+        verbose_name='Пост'
+
     )
     text = models.TextField(
         verbose_name='Комментарий',
