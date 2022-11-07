@@ -3,6 +3,7 @@
 import django.contrib.auth.models
 from django.db import migrations, models
 import django.utils.timezone
+import users.validators
 
 
 class Migration(migrations.Migration):
@@ -24,10 +25,10 @@ class Migration(migrations.Migration):
                 ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-                ('username', models.CharField(max_length=150, unique=True, verbose_name='Имя пользователя')),
-                ('email', models.EmailField(max_length=254, verbose_name='Почта')),
-                ('first_name', models.TextField(verbose_name='Имя')),
-                ('last_name', models.TextField(verbose_name='Фамилия')),
+                ('username', models.CharField(max_length=150, unique=True, validators=[users.validators.UsernameRegexValidator, users.validators.me_username], verbose_name='Имя пользователя')),
+                ('email', models.EmailField(max_length=254, unique=True, verbose_name='Почта')),
+                ('first_name', models.TextField(blank=True, verbose_name='Имя')),
+                ('last_name', models.TextField(blank=True, verbose_name='Фамилия')),
                 ('bio', models.TextField(blank=True, verbose_name='Биография')),
                 ('role', models.TextField(choices=[('User', 'User'), ('Moderator', 'Moderator'), ('Admin', 'Admin')], default='User', verbose_name='Роль')),
                 ('confirmation_code', models.TextField(verbose_name='Код подтверждения')),

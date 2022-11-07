@@ -9,7 +9,7 @@ from users.models import User
 class Category(models.Model):
     name = models.CharField(
         'Название',
-        max_length=100
+        max_length=256
     )
     slug = models.SlugField(
         'Идентификатор',
@@ -29,7 +29,7 @@ class Category(models.Model):
 class Genre(models.Model):
     name = models.CharField(
         'Название',
-        max_length=100
+        max_length=256
     )
     slug = models.SlugField(
         'Идентификатор',
@@ -49,7 +49,7 @@ class Genre(models.Model):
 class Title(models.Model):
     name = models.CharField(
         'Название',
-        max_length=200
+        max_length=256
     )
     year = models.IntegerField(
         'Год выпуска',
@@ -63,7 +63,7 @@ class Title(models.Model):
     genre = models.ManyToManyField(
         Genre,
         verbose_name='Жанр',
-        null=True
+        through='GenreTitle'
     )
     category = models.ForeignKey(
         Category,
@@ -85,6 +85,85 @@ class Title(models.Model):
 
     def __str__(self):
         return self.name[:30]
+
+
+class GenreTitle(models.Model):
+    genre = models.ForeignKey(
+        Genre,
+        verbose_name='Жанр',
+        on_delete=models.CASCADE)
+    title = models.ForeignKey(
+        Title,
+        verbose_name='Произведение',
+        on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.title}, жанр - {self.genre}'
+
+    class Meta:
+        verbose_name = 'Произведение и жанр'
+        verbose_name_plural = 'Произведения и жанры'
+
+
+class Review(models.Model):
+    title_id = models.ForeignKey(
+        Title,
+        on_delete=models.CASCADE,
+        related_name='reviews',
+        verbose_name='Название произведения'
+    )
+    text = models.TextField(
+        verbose_name='Ваш отзыв',
+        help_text='Введите текст вашего отзыва'
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='author',
+        verbose_name='Автор отзыва'
+    )
+    score = models.IntegerField(
+        default=1,
+        blank=True,
+        verbose_name='Оценка',
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(10),
+        ]
+    )
+    pub_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-pub_date',)
+
+    def __str__(self):
+        return self.text[:30]
+
+
+class Comment(models.Model):
+    review_id = models.ForeignKey(
+        Review,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name='Пост'
+    )
+    text = models.TextField(
+        verbose_name='Комментарий',
+        help_text='Текст комментария'
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name='Автор'
+    )
+    pub_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-pub_date',)
+
+    def __str__(self):
+        return self.text[:15]
 
 
 class Review(models.Model):
