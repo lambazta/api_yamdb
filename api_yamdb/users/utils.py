@@ -3,6 +3,7 @@ import random
 from .models import User
 
 
+
 def send_confirmation_code(username, email):
     subject = 'Your account confirmation code'
     confirmation_code = random.randint(100000, 999999)

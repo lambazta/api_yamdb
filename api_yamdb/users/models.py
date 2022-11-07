@@ -26,12 +26,12 @@ class User(AbstractUser):
     first_name = models.TextField(
         'Имя',
         blank=True,
-        # null=True,
+
     )
     last_name = models.TextField(
         'Фамилия',
         blank=True,
-        # null=True,
+
     )
     bio = models.TextField(
         'Биография',
@@ -45,3 +45,6 @@ class User(AbstractUser):
     confirmation_code = models.TextField(
         'Код подтверждения',
     )
+
+    def __str__(self):
+        return self.username
