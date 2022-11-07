@@ -26,10 +26,12 @@ class User(AbstractUser):
     first_name = models.TextField(
         'Имя',
         blank=True,
+
     )
     last_name = models.TextField(
         'Фамилия',
         blank=True,
+
     )
     bio = models.TextField(
         'Биография',

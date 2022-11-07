@@ -1,3 +1,12 @@
+from django.db.models import Avg
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, viewsets
+from rest_framework.pagination import PageNumberPagination
+from reviews.models import Category, Genre, Title
+from .mixins import ListCreateDestroyViewSet
+from .permissions import (IsAdminOrReadOnly)
+from .serializers import (CategorySerializer, GenreSerializer,
+                          ReadOnlyTitleSerializer, TitleSerializer)
 from rest_framework import filters, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
@@ -6,7 +15,6 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-
 from .permissions import IsAdminPermission
 from .serializers import (
     RegistrationSerializer,
@@ -15,6 +23,42 @@ from .serializers import (
     MeSerializer)
 from users.models import User
 from users.utils import send_confirmation_code
+
+
+class CategoryViewSet(ListCreateDestroyViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = PageNumberPagination
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
+
+
+class GenreViewSet(ListCreateDestroyViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = PageNumberPagination
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
+
+
+class TitleViewSet(viewsets.ModelViewSet):
+    queryset = Title.objects.all().annotate(
+        Avg('reviews__score')
+    ).order_by('name')
+    serializer_class = TitleSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = PageNumberPagination
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('category', 'genre', 'name', 'year')
+
+    def get_serializer_class(self):
+        if self.action in ('retrieve', 'list'):
+            return ReadOnlyTitleSerializer
+        return TitleSerializer
 
 
 class RegistrationAPI(APIView):
@@ -88,3 +132,4 @@ class UserViewSet(viewsets.ModelViewSet):
     lookup_field = 'username'
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
+
