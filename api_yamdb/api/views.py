@@ -109,13 +109,21 @@ class ReviewsViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewsSerializer
     permission_classes = [AuthorizedOrReadOnly]
     pagination_class = LimitOffsetPagination
+    # pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        return get_list_or_404(Review, title_id=self.kwargs.get('title_id'))
+        title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
+        # title = Title.objects.filter(pk=self.kwargs.get('title_id'))
+        # reviews = get_list_or_404(Review, title_id=self.kwargs.get('title_id'))
+        # reviews = Review.objects.filter(title_id=self.kwargs.get('title_id'))
+        # reviews = Review.objects.filter(title_id=title.pk)
+        # return title.reviews
+        return title.reviews.all()
 
     def perform_create(self, serializer):
         title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
-        serializer.save(author=self.request.user, title=title)
+        # serializer.save(author=self.request.user, title=title)
+        serializer.save(author=self.request.user, title_id=title)
 
 
 class CommentsViewSet(viewsets.ModelViewSet):
@@ -131,20 +139,11 @@ class CommentsViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, review=review)
 
 
-class TitlesViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
-    serializer_class = TitleSerializer
-    permission_classes = [AuthorizedOrReadOnly]
-    pagination_class = LimitOffsetPagination
-
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
-
 class CategoryViewSet(ListCreateDestroyViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    # permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (AuthorizedOrReadOnly,)
     pagination_class = PageNumberPagination
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
@@ -154,7 +153,8 @@ class CategoryViewSet(ListCreateDestroyViewSet):
 class GenreViewSet(ListCreateDestroyViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    # permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (AuthorizedOrReadOnly,)
     pagination_class = PageNumberPagination
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
@@ -166,11 +166,12 @@ class TitleViewSet(viewsets.ModelViewSet):
         Avg('reviews__score')
     ).order_by('name')
     serializer_class = TitleSerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    # permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (AuthorizedOrReadOnly,)
     pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('category', 'genre', 'name', 'year')
-    
+
     def get_serializer_class(self):
         if self.action in ('retrieve', 'list'):
             return ReadOnlyTitleSerializer

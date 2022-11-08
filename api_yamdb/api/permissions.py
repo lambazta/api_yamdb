@@ -43,7 +43,6 @@ class AuthorizedOrReadOnly(permissions.BasePermission):
             or request.user.role == 'admin'
             or request.user.role == 'moderator'
         )
-from rest_framework import permissions
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
