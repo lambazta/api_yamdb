@@ -27,11 +27,10 @@ class CommentsAdmin(admin.ModelAdmin):
     # Добавляем возможность фильтрации по дате
     list_filter = ('pub_date',)
 
+
 admin.site.register(Review, ReviewsAdmin)
 admin.site.register(Comment, CommentsAdmin)
 admin.site.register(Title, TitlesAdmin)
 admin.site.register(Category)
 admin.site.register(Genre)
 admin.site.register(GenreTitle)
-
-

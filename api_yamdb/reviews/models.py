@@ -5,7 +5,6 @@ from users.models import User
 from .validators import validate_year
 
 
-
 class Category(models.Model):
     name = models.CharField(
         'Название',
@@ -87,7 +86,6 @@ class Title(models.Model):
         return self.name[:30]
 
 
-
 class GenreTitle(models.Model):
     genre = models.ForeignKey(
         Genre,
@@ -141,16 +139,12 @@ class Review(models.Model):
         return self.text[:30]
 
 
-
 class Comment(models.Model):
     review_id = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
         related_name='comments',
-
         verbose_name='Отзыв'
-        verbose_name='Пост'
-
     )
     text = models.TextField(
         verbose_name='Комментарий',

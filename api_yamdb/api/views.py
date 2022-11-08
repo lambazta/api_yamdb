@@ -1,37 +1,28 @@
-
 from django.db.models import Avg
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets
-from rest_framework.pagination import PageNumberPagination
-from reviews.models import Category, Genre, Title
+from reviews.models import Category, Genre, Review, Title, Comment
 from .mixins import ListCreateDestroyViewSet
-from .permissions import (IsAdminOrReadOnly)
+from .permissions import (IsAdminOrReadOnly,
+                          AuthorizedOrReadOnly,
+                          IsAdminPermission)
 from .serializers import (CategorySerializer, GenreSerializer,
-                          ReadOnlyTitleSerializer, TitleSerializer)
+                          ReadOnlyTitleSerializer, TitleSerializer,
+                          RegistrationSerializer,
+                          VerifyAccountSerializer,
+                          UserSerializer,
+                          MeSerializer,
+                          ReviewsSerializer,
+                          CommentsSerializer)
 
-from rest_framework import filters, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import (PageNumberPagination,
+                                       LimitOffsetPagination)
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.shortcuts import get_object_or_404
-
-from django.shortcuts import get_list_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework import status
-from reviews.models import Review, Title, Comment
-from .permissions import AuthorizedOrReadOnly
-from .serializers import CommentsSerializer, ReviewsSerializer
-from .serializers import TitleSerializer
-from rest_framework.pagination import LimitOffsetPagination
-
-from .permissions import IsAdminPermission
-from .serializers import (
-    RegistrationSerializer,
-    VerifyAccountSerializer,
-    UserSerializer,
-    MeSerializer
-)
 from users.models import User
 from users.utils import send_confirmation_code
 
