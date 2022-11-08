@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Category, Comment, Genre, GenreTitle, Review, Title
 
 
@@ -28,9 +29,9 @@ class CommentsAdmin(admin.ModelAdmin):
     list_filter = ('pub_date',)
 
 
-admin.site.register(Title, TitlesAdmin)
 admin.site.register(Review, ReviewsAdmin)
 admin.site.register(Comment, CommentsAdmin)
+admin.site.register(Title, TitlesAdmin)
 admin.site.register(Category)
 admin.site.register(Genre)
 admin.site.register(GenreTitle)
