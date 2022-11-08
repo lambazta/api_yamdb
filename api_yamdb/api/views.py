@@ -14,6 +14,7 @@ from .serializers import (CategorySerializer, GenreSerializer,
                           MeSerializer,
                           ReviewsSerializer,
                           CommentsSerializer)
+from .filters import TitlesFilter
 
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.pagination import (PageNumberPagination,
@@ -81,7 +82,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('category', 'genre', 'name', 'year')
+    filterset_class = TitlesFilter
 
     def get_serializer_class(self):
         if self.action in ('retrieve', 'list'):
