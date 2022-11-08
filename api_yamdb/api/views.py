@@ -1,31 +1,26 @@
 from django.db.models import Avg
-from .filters import TitlesFilter
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, viewsets
-from reviews.models import Category, Genre, Review, Title
-from .mixins import ListCreateDestroyViewSet
-from .permissions import (IsAdminOrReadOnly,
-                          AuthorizedOrReadOnly,
-                          IsAdminPermission)
-from .serializers import (CategorySerializer, GenreSerializer,
-                          ReadOnlyTitleSerializer, TitleSerializer,
-                          RegistrationSerializer,
-                          VerifyAccountSerializer,
-                          UserSerializer,
-                          MeSerializer,
-                          ReviewsSerializer,
-                          CommentsSerializer)
-
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.pagination import (PageNumberPagination,
-                                       LimitOffsetPagination)
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, status, viewsets
+from rest_framework.pagination import (LimitOffsetPagination,
+                                       PageNumberPagination)
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from reviews.models import Category, Genre, Review, Title
 from users.models import User
 from users.utils import send_confirmation_code
+
+from .filters import TitlesFilter
+from .mixins import ListCreateDestroyViewSet
+from .permissions import (AuthorizedOrReadOnly, IsAdminOrReadOnly,
+                          IsAdminPermission)
+from .serializers import (CategorySerializer, CommentsSerializer,
+                          GenreSerializer, MeSerializer,
+                          ReadOnlyTitleSerializer, RegistrationSerializer,
+                          ReviewsSerializer, TitleSerializer, UserSerializer,
+                          VerifyAccountSerializer)
 
 
 class ReviewsViewSet(viewsets.ModelViewSet):
@@ -64,7 +59,7 @@ class CategoryViewSet(ListCreateDestroyViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = PageNumberPagination
+    pagination_class = LimitOffsetPagination
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
@@ -74,7 +69,7 @@ class GenreViewSet(ListCreateDestroyViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = PageNumberPagination
+    pagination_class = LimitOffsetPagination
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
@@ -86,7 +81,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     ).order_by('name')
     serializer_class = TitleSerializer
     permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = PageNumberPagination
+    pagination_class = LimitOffsetPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitlesFilter
 
@@ -163,7 +158,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated, IsAdminPermission)
-    pagination_class = PageNumberPagination
+    pagination_class = LimitOffsetPagination
     lookup_field = 'username'
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)

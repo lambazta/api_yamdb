@@ -1,8 +1,9 @@
-from django.core.management.base import BaseCommand
-from reviews.models import Category, Genre, Title
 import csv
 from pathlib import Path
+
+from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
+from reviews.models import Category, Genre, Title
 
 DIR_PATH = Path.cwd()
 

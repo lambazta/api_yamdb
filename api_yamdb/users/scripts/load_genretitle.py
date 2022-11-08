@@ -1,5 +1,6 @@
-from reviews.models import GenreTitle, Genre, Title
 import csv
+
+from reviews.models import Genre, GenreTitle, Title
 
 
 def run():

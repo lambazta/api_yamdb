@@ -1,5 +1,6 @@
-from reviews.models import Title, Category
 import csv
+
+from reviews.models import Category, Title
 
 
 def run():

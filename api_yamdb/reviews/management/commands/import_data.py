@@ -1,6 +1,6 @@
 from csv import DictReader
-from django.core.management import BaseCommand
 
+from django.core.management import BaseCommand
 from reviews.models import Category, Comment, Genre, GenreTitle, Review, Title
 from users.models import User
 
@@ -48,14 +48,14 @@ class Command(BaseCommand):
             data.save()
 
         for row in DictReader(open('static/data/review.csv', encoding="utf8")):
-            data = Review(id=row['id'], title_id_id=row['title_id'],
+            data = Review(id=row['id'], title_id=row['title_id'],
                           text=row['text'], author_id=row['author'],
                           score=row['score'], pub_date=row['pub_date'])
             data.save()
 
         for row in DictReader(open('static/data/comments.csv',
                               encoding='utf8')):
-            data = Comment(id=row['id'], review_id_id=row['review_id'],
+            data = Comment(id=row['id'], review_id=row['review_id'],
                            text=row['text'], author_id=row['author'],
                            pub_date=row['pub_date'])
             data.save()
