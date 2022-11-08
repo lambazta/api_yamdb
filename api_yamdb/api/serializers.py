@@ -20,7 +20,6 @@ class GenreSerializer(serializers.ModelSerializer):
 
 class TitleSerializer(serializers.ModelSerializer):
     genre = serializers.SlugRelatedField(
-
         slug_field='slug', many=True, queryset=Genre.objects.all()
     )
     category = serializers.SlugRelatedField(
@@ -51,11 +50,31 @@ class ReviewsSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
         read_only=True, slug_field='username'
     )
-    title = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = Review
-        fields = ('title', 'text', 'author', 'score', 'pub_date')
+        fields = ('id', 'title', 'text', 'author', 'score', 'pub_date')
+        read_only_fields = ('title',)
+
+    def validate_score(self, score):
+        if not (0 < score <= 10):
+            raise serializers.ValidationError(
+                'Рейтинг должен быть в интервале от 1 до 10.'
+            )
+        return score
+
+    def validate(self, data):
+        request = self.context.get('request')
+        title = self.context.get('view').kwargs.get('title_id')
+        if (
+            Review.objects.filter(title=title,
+                                  author=request.user).exists()
+            and request.method == 'POST'
+        ):
+            raise serializers.ValidationError(
+                'Вы можете оставить только один отзыв!'
+            )
+        return data
 
 
 class CommentsSerializer(serializers.ModelSerializer):
@@ -65,7 +84,8 @@ class CommentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('review_id', 'text', 'author', 'pub_date')
+        fields = ('id', 'review', 'text', 'author', 'pub_date')
+        read_only_fields = ('review',)
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

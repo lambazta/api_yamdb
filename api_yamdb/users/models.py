@@ -43,5 +43,8 @@ class User(AbstractUser):
         'Код подтверждения',
     )
 
+    class Meta:
+        ordering = ('username',)
+
     def __str__(self):
         return self.username
