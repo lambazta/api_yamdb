@@ -127,7 +127,6 @@ class VerifyAccountAPI(APIView):
                     {'message': 'Wrong confirmation code'},
                     status=status.HTTP_400_BAD_REQUEST)
 
-            user.is_verified
             user.save()
             token = RefreshToken.for_user(user)
             return Response(
