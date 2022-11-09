@@ -23,20 +23,23 @@ class User(AbstractUser):
         unique=True,
         blank=False,
     )
-    first_name = models.TextField(
+    first_name = models.CharField(
         'Имя',
+        max_length=150,
         blank=True,
     )
-    last_name = models.TextField(
+    last_name = models.CharField(
         'Фамилия',
+        max_length=150,
         blank=True,
     )
     bio = models.TextField(
         'Биография',
         blank=True,
     )
-    role = models.TextField(
+    role = models.CharField(
         'Роль',
+        max_length=30,
         choices=ROLES,
         default='user',
     )
@@ -46,6 +49,22 @@ class User(AbstractUser):
 
     class Meta:
         ordering = ('username',)
+
+    @property
+    def is_verified(self):
+        return True
+
+    @property
+    def is_admin(self):
+        if self.role == 'admin':
+            return True
+        return False
+
+    @property
+    def is_moderator(self):
+        if self.role == 'moderator':
+            return True
+        return False
 
     def __str__(self):
         return self.username

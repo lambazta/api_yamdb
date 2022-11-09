@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+
 from reviews.models import Category, Genre, Review, Title
 from users.models import User
 from users.utils import send_confirmation_code
@@ -120,16 +121,13 @@ class VerifyAccountAPI(APIView):
             username = serializer.data['username']
             confirmation_code = serializer.data['confirmation_code']
             user = get_object_or_404(User, username=username)
-            if user is None:
-                return Response(
-                    serializer.data, status=status.HTTP_404_NOT_FOUND)
 
             if user.confirmation_code != confirmation_code:
                 return Response(
                     {'message': 'Wrong confirmation code'},
                     status=status.HTTP_400_BAD_REQUEST)
 
-            user.is_verified = True
+            user.is_verified
             user.save()
             token = RefreshToken.for_user(user)
             return Response(

@@ -1,6 +1,7 @@
 from csv import DictReader
 
 from django.core.management import BaseCommand
+
 from reviews.models import Category, Comment, Genre, GenreTitle, Review, Title
 from users.models import User
 
@@ -12,7 +13,6 @@ database with tables"""
 
 
 class Command(BaseCommand):
-    # Show this when the user types help
     help = 'Loads data'
 
     def handle(self, *args, **options):
