@@ -51,10 +51,6 @@ class User(AbstractUser):
         ordering = ('username',)
 
     @property
-    def is_verified(self):
-        return True
-
-    @property
     def is_admin(self):
         if self.role == 'admin':
             return True
