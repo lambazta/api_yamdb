@@ -122,7 +122,7 @@ class Review(models.Model):
         related_name='reviews',
         verbose_name='Автор отзыва'
     )
-    score = models.IntegerField(
+    score = models.PositiveSmallIntegerField(
         default=1,
         blank=True,
         verbose_name='Оценка',
