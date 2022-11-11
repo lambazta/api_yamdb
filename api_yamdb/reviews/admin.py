@@ -6,7 +6,7 @@ from .models import Category, Comment, Genre, GenreTitle, Review, Title
 class TitlesAdmin(admin.ModelAdmin):
     # Перечисляем поля, которые должны отображаться в админке
     list_display = ('id', 'name', 'year', 'description',
-                    'category', 'rating')
+                    'category')
     # Добавляем интерфейс для поиска по тексту постов
     search_fields = ('name',)
 
