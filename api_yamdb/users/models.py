@@ -5,10 +5,13 @@ from .validators import UsernameRegexValidator, me_username
 
 
 class User(AbstractUser):
-    ROLES = [
-        ('user', 'user'),
-        ('moderator', 'moderator'),
-        ('admin', 'admin'),
+    USER = 'USR'
+    MODERATOR = 'MDR'
+    ADMIN = 'ADM'
+    ROLE_CHOICES = [
+        (USER, 'user'),
+        (MODERATOR, 'moderator'),
+        (ADMIN, 'admin'),
     ]
 
     username = models.CharField(
@@ -39,9 +42,9 @@ class User(AbstractUser):
     )
     role = models.CharField(
         'Роль',
-        max_length=30,
-        choices=ROLES,
-        default='user',
+        max_length=3,
+        choices=ROLE_CHOICES,
+        default=USER,
     )
     confirmation_code = models.TextField(
         'Код подтверждения',
@@ -52,15 +55,12 @@ class User(AbstractUser):
 
     @property
     def is_admin(self):
-        if self.role == 'admin':
-            return True
-        return False
-
+        self.role == ADMIN
+         
     @property
     def is_moderator(self):
-        if self.role == 'moderator':
-            return True
-        return False
+        self.role == MODERATOR
+        
 
     def __str__(self):
         return self.username
