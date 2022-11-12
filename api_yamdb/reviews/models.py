@@ -49,7 +49,7 @@ class Genre(models.Model):
 class Title(models.Model):
     name = models.CharField(
         'Название',
-        max_length=256
+        max_length=255
     )
     year = models.IntegerField(
         'Год выпуска',
@@ -71,11 +71,6 @@ class Title(models.Model):
         on_delete=models.SET_NULL,
         related_name='titles',
         null=True
-    )
-    rating = models.IntegerField(
-        'Рейтинг',
-        null=True,
-        default=None
     )
 
     class Meta:
