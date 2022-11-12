@@ -65,6 +65,7 @@ class User(AbstractUser):
     @property
     def code_gen(self):
         random_int=random.randint(MIN_VALUE, MAX_VALUE)
+        return random_int
         
 
     def __str__(self):
