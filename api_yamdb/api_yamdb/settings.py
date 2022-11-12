@@ -134,9 +134,12 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+# Min and Max values for random confirmation code generation
+MIN_VALUE=100000
+MAX_VALUE=999999
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-
+EMAIL_HOST_USER = 'from@example.com'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
