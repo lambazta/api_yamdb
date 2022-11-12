@@ -1,4 +1,6 @@
-from django.conf import settings.MIN_VALUE, settings.MAX_VALUE
+import random
+
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -6,9 +8,9 @@ from .validators import UsernameRegexValidator, me_username
 
 
 class User(AbstractUser):
-    USER = 'USR'
-    MODERATOR = 'MDR'
-    ADMIN = 'ADM'
+    USER = 'user'
+    MODERATOR = 'moderator'
+    ADMIN = 'admin'
     ROLE_CHOICES = [
         (USER, 'user'),
         (MODERATOR, 'moderator'),
@@ -43,7 +45,7 @@ class User(AbstractUser):
     )
     role = models.CharField(
         'Роль',
-        max_length=3,
+        max_length=10,
         choices=ROLE_CHOICES,
         default=USER,
     )
@@ -56,17 +58,17 @@ class User(AbstractUser):
 
     @property
     def is_admin(self):
-        self.role == ADMIN
-         
-    @property
-    def is_moderator(self):
-        self.role == MODERATOR
+        return self.role == self.ADMIN
 
     @property
+    def is_moderator(self):
+        return self.role == self.MODERATOR
+
     def code_gen(self):
-        random_int=random.randint(MIN_VALUE, MAX_VALUE)
+        min = settings.MIN_VALUE
+        max = settings.MAX_VALUE
+        random_int = random.randint(min, max)
         return random_int
-        
 
     def __str__(self):
         return self.username
